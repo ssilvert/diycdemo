@@ -1,0 +1,340 @@
+<!--
+ * JBoss, Home of Professional Open Source
+ * Copyright 2012 Red Hat Inc. and/or its affiliates and other contributors
+ * as indicated by the @author tags. All rights reserved.
+ * See the copyright.txt in the distribution for a
+ * full listing of individual contributors.
+ *
+ * This copyrighted material is made available to anyone wishing to use,
+ * modify, copy, or redistribute it subject to the terms and conditions
+ * of the GNU Lesser General Public License, v. 2.1.
+ * This program is distributed in the hope that it will be useful, but WITHOUT A
+ * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+ * PARTICULAR PURPOSE.  See the GNU Lesser General Public License for more details.
+ * You should have received a copy of the GNU Lesser General Public License,
+ * v.2.1 along with this distribution; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+ * MA  02110-1301, USA.
+-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:a4j="http://richfaces.org/a4j" xmlns:rich="http://richfaces.org/rich"
+      xmlns:c="http://java.sun.com/jsp/jstl/core">
+
+    <h:head>
+        <h:outputStylesheet name="main.css" library="css"/>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+        <style type="text/css">
+            html, body {
+                margin: 0px;
+                padding: 0px;
+                border: 0px;
+            }
+        </style>
+    </h:head>
+    <body>
+        <div id="container">
+            <div id="toppanel">
+                <rich:panel header="Server">
+                    <h:form>
+                        <h:panelGrid columns="2">
+                            <h:outputLabel value="Server Name:" for="servername"/>
+                            <h:inputText id="servername" value="#{_root_.name}"/>
+                            <h:outputLabel value="Launch Type:" for="launchtype"/>
+                            <h:outputText id="launchtype" value="#{_root_.launch_dash_type}"/>
+                            <h:outputLabel value="Version:" for="releaseversion"/>
+                            <h:outputText id="releaseversion" value="#{_root_.release_dash_version}"/>
+                            <h:commandButton value="submit"/>
+                        </h:panelGrid>
+                    </h:form>
+                </rich:panel>
+            </div>
+            <div id="column1">
+                <h:form>
+                    <c:set var="platform" value="#{core_dash_service_eq_platform_dash_mbean}" />
+                    <c:set var="runtime" value="#{platform.type_eq_runtime}" scope="session"/>
+                    <c:set var="os" value="#{platform.type_eq_operating_dash_system}" scope="session"/>
+                    <c:set var="threads" value="#{platform.type_eq_threading}"/>
+                    <c:set var="memory" value="#{platform.type_eq_memory}" scope="session"/>
+                    <c:set var="garbageCollector" value="#{platform.type_eq_garbage_dash_collector}" scope="session"/>
+                    <c:set var="gcScavenge" value="#{garbageCollector.name_eq_PS_Scavenge}" scope="session"/>
+                    <c:set var="gcMarkSweep" value="#{garbageCollector.name_eq_PS_MarkSweep}" scope="session"/>
+                    <rich:panel header="Server Platform">
+                        <rich:collapsiblePanel header="Runtime">
+                            <h:panelGrid columns="2">
+                                <h:outputLabel value="Start Time:" for="starttime"/>
+                                <h:outputText id="starttime" value="#{runtime.start_dash_time}">
+                                    <f:convertDateTime dateStyle="full" />
+                                </h:outputText>
+                                <h:outputLabel value="Uptime (ms):" for="uptime"/>
+                                <h:outputText id="uptime" value="#{runtime.uptime}"/>
+                            </h:panelGrid>
+                        </rich:collapsiblePanel>
+                        <rich:collapsiblePanel header="Operating System">
+                            <h:panelGrid columns="2">
+                                <h:outputLabel value="Name:" for="osname"/>
+                                <h:outputText id="osname" value="#{os.name}"/>
+                                <h:outputLabel value="Architecture:" for="arch"/>
+                                <h:outputText id="arch" value="#{os.arch}"/>
+                                <h:outputLabel value="Version:" for="osversion"/>
+                                <h:outputText id="osversion" value="#{os.version}"/>
+                                <h:outputLabel value="Processors:" for="processors"/>
+                                <h:outputText id="processors" value="#{os.available_dash_processors}"/>
+                            </h:panelGrid>
+                        </rich:collapsiblePanel>
+                        <rich:collapsiblePanel header="Threading" switchType="ajax">
+                            <h:panelGrid columns="2">
+                                <h:outputLabel value="Thread Count:" for="threadcount"/>
+                                <h:outputText id="threadcount" value="#{threads.thread_dash_count}"/>
+                                <h:outputLabel value="Peak Thread Count:" for="peakthreadcount"/>
+                                <h:outputText id="peakthreadcount" value="#{threads.peak_dash_thread_dash_count}"/>
+                                <h:outputLabel value="Total Started Thread Count:" for="totalstartedthreadcount"/>
+                                <h:outputText id="totalstartedthreadcount" value="#{threads.total_dash_started_dash_thread_dash_count}"/>
+                                <h:outputLabel value="Daemon Thread Count:" for="daemonthreadcount"/>
+                                <h:outputText id="daemonthreadcount" value="#{threads.daemon_dash_thread_dash_count}"/>
+                            </h:panelGrid>
+                        </rich:collapsiblePanel>
+                        <rich:collapsiblePanel header="Heap Memory" expanded="false" switchType="ajax">
+                            <h:panelGrid columns="2">
+                                <c:set var="heap" value="#{memory.heap_dash_memory_dash_usage}"/>
+                                <h:outputLabel value="Init:" for="init"/>
+                                <h:outputText id="init" value="#{heap.init}"/>
+                                <h:outputLabel value="Used:" for="used"/>
+                                <h:outputText id="used" value="#{heap.used}"/>
+                                <h:outputLabel value="Committed:" for="committed"/>
+                                <h:outputText id="committed" value="#{heap.committed}"/>
+                                <h:outputLabel value="Max:" for="max"/>
+                                <h:outputText id="max" value="#{heap.max}"/>
+                            </h:panelGrid>
+                        </rich:collapsiblePanel>
+                        <rich:collapsiblePanel header="Non-Heap Memory" expanded="false" switchType="ajax">
+                            <h:panelGrid columns="2">
+                                <c:set var="nonheap" value="#{memory.non_dash_heap_dash_memory_dash_usage}"/>
+                                <h:outputLabel value="Init:" for="nonheapinit"/>
+                                <h:outputText id="nonheapinit" value="#{nonheap.init}"/>
+                                <h:outputLabel value="Used:" for="nonheapused"/>
+                                <h:outputText id="nonheapused" value="#{nonheap.used}"/>
+                                <h:outputLabel value="Committed:" for="nonheapcommitted"/>
+                                <h:outputText id="nonheapcommitted" value="#{nonheap.committed}"/>
+                                <h:outputLabel value="Max:" for="nonheapmax"/>
+                                <h:outputText id="nonheapmax" value="#{nonheap.max}"/>
+                            </h:panelGrid>
+                        </rich:collapsiblePanel>
+                        <rich:collapsiblePanel header="Garbage Collector PS_Scavenge" expanded="false" switchType="ajax">
+                            <h:panelGrid columns="2">
+                                <h:outputLabel value="Collection Count:" for="s_collectionCount"/>
+                                <h:outputText id="s_collectionCount" value="#{gcScavenge.collection_dash_count}"/>
+                                <h:outputLabel value="Collection Time:" for="s_collectionTime"/>
+                                <h:outputText id="s_collectionTime" value="#{gcScavenge.collection_dash_time}"/>
+                                <h:outputLabel value="Pool Names:" for="s_memPoolNames"/>
+                                <rich:list id="s_memPoolNames" var="memPoolName" type="unordered" value="#{gcScavenge.memory_dash_pool_dash_names}">
+                                    <h:outputText value="#{memPoolName}"/>
+                                </rich:list>
+                            </h:panelGrid>
+                        </rich:collapsiblePanel>
+                        <rich:collapsiblePanel header="Garbage Collector PS_MarkSweep" expanded="false" switchType="ajax">
+                            <h:panelGrid columns="2">
+                                <h:outputLabel value="Collection Count:" for="m_collectionCount"/>
+                                <h:outputText id="m_collectionCount" value="#{gcMarkSweep.collection_dash_count}"/>
+                                <h:outputLabel value="Collection Time:" for="m_collectionTime"/>
+                                <h:outputText id="m_collectionTime" value="#{gcMarkSweep.collection_dash_time}"/>
+                                <h:outputLabel value="Pool Names:" for="m_memPoolNames"/>
+                                <rich:list id="m_memPoolNames" var="m_memPoolName" type="unordered" value="#{gcMarkSweep.memory_dash_pool_dash_names}">
+                                    <h:outputText value="#{m_memPoolName}"/>
+                                </rich:list>
+                            </h:panelGrid>
+                        </rich:collapsiblePanel>
+                    </rich:panel>
+                </h:form>
+            </div>
+            <div id="col2side">
+                <rich:panel id="deploymentpanel" header="Deployments">
+                    <rich:dataGrid value="#{_CLI_['/deployment=*/:read-resource(recursive=true,include-runtime=true,include-defaults=true)']}"
+                                   var="deployment" columns="1" elements="10">
+                        <h:form>
+                            <rich:collapsiblePanel header="#{deployment.result.name}" expanded="false">
+                                <rich:panel id="enabledisablepanel">
+                                    <h:form>
+                                        <a4j:commandButton value="Enable" render="deploymentstatistics,enabledisablepanel" rendered="#{!deployment.result.enabled}"
+                                                           action="#{_CLI_['/deployment='.concat(deployment.result.name).concat('/:deploy')].
+                                                                     _CLI_['/deployment='.concat(deployment.result.name).concat('/:redeploy')].clone()}"/>
+                                        <a4j:commandButton value="Disable" render="deploymentstatistics,enabledisablepanel" rendered="#{deployment.result.enabled}"
+                                                           action="#{_CLI_['/deployment='.concat(deployment.result.name).concat('/:undeploy')].clone()}"/>
+                                    </h:form>
+                                </rich:panel>
+                                <h:panelGrid id="deploymentstatistics" columns="8" styleClass="alignTop">
+                                    <rich:panel header="Status">
+                                        <h:panelGrid columns="2">
+                                            <h:outputLabel value="Runtime Name:" for="runtimename"/>
+                                            <h:outputText id="runtimename" value="#{deployment.result.runtime_dash_name}"/>
+                                        </h:panelGrid>
+                                        <h:panelGrid columns="2">
+                                            <h:outputLabel value="Enabled:" for="enabled"/>
+                                            <h:outputText id="enabled" value="#{deployment.result.enabled}"/>
+                                        </h:panelGrid>
+                                        <h:panelGrid columns="2">
+                                            <h:outputLabel value="Status:" for="status"/>
+                                            <h:outputText id="status" value="#{deployment.result.status}"/>
+                                        </h:panelGrid>
+                                        <h:panelGrid columns="2">
+                                            <h:outputLabel value="Context Root:" for="contextroot"/>
+                                            <h:outputText id="contextroot" value="#{deployment.result.subsystem.web.context_dash_root}"/>
+                                        </h:panelGrid>
+                                        <h:panelGrid columns="2">
+                                            <h:outputLabel value="Virtual Host:" for="virtualhost"/>
+                                            <h:outputText id="virtualhost" value="#{deployment.result.subsystem.web.virtual_dash_host}"/>
+                                        </h:panelGrid>
+                                    </rich:panel>
+                                    <rich:panel header="Sessions">
+                                        <h:panelGrid columns="2">
+                                            <h:outputLabel value="Active:" for="activesessions"/>
+                                            <h:outputText id="activesessions" value="#{deployment.result.subsystem.web.active_dash_sessions}"/>
+                                        </h:panelGrid>
+                                        <h:panelGrid columns="2">
+                                            <h:outputLabel value="Expired:" for="expiredsessions"/>
+                                            <h:outputText id="expiredsessions" value="#{deployment.result.subsystem.web.expired_dash_sessions}"/>
+                                        </h:panelGrid>
+                                        <h:panelGrid columns="2">
+                                            <h:outputLabel value="Max Active:" for="maxactivesessions"/>
+                                            <h:outputText id="maxactivesessions" value="#{deployment.result.subsystem.web.max_dash_active_dash_sessions}"/>
+                                        </h:panelGrid>
+                                        <h:panelGrid columns="2">
+                                            <h:outputLabel value="Rejected:" for="rejectedsessions"/>
+                                            <h:outputText id="rejectedsessions" value="#{deployment.result.subsystem.web.rejected_dash_sessions}"/>
+                                        </h:panelGrid>
+                                        <h:panelGrid columns="2">
+                                            <h:outputLabel value="Avg Alive Time:" for="avgalivetime"/>
+                                            <h:outputText id="avgalivetime" value="#{deployment.result.subsystem.web.session_dash_avg_dash_alive_dash_time}"/>
+                                        </h:panelGrid>
+                                        <h:panelGrid columns="2">
+                                            <h:outputLabel value="Max Alive Time:" for="maxalivetime"/>
+                                            <h:outputText id="maxalivetime" value="#{deployment.result.subsystem.web.session_dash_max_dash_alive_dash_time}"/>
+                                        </h:panelGrid>
+                                        <h:panelGrid columns="2">
+                                            <h:outputLabel value="Sessions Created:" for="sessionscreated"/>
+                                            <h:outputText id="sessionscreated" value="#{deployment.result.subsystem.web.sessions_dash_created}"/>
+                                        </h:panelGrid>
+                                    </rich:panel>
+                                    <rich:panel header="Servlets">
+                                        <rich:dataGrid value="#{deployment.result.subsystem.web.servlet._asPropertyList_}" var="servlet" columns="1" elements="5">
+                                            <rich:collapsiblePanel header="#{servlet.name}" expanded="false">
+                                                <h:panelGrid columns="2">
+                                                    <h:outputLabel value="Load Time:" for="loadtime"/>
+                                                    <h:outputText id="loadtime" value="#{servlet.value.load_dash_time}"/>
+                                                </h:panelGrid>
+                                                <h:panelGrid columns="2">
+                                                    <h:outputLabel value="Max Time:" for="maxtime"/>
+                                                    <h:outputText id="maxtime" value="#{servlet.value.maxTime}"/>
+                                                </h:panelGrid>
+                                                <h:panelGrid columns="2">
+                                                    <h:outputLabel value="Min Time:" for="mintime"/>
+                                                    <h:outputText id="mintime" value="#{servlet.value.min_dash_time}"/>
+                                                </h:panelGrid>
+                                                <h:panelGrid columns="2">
+                                                    <h:outputLabel value="Processing Time:" for="processingtime"/>
+                                                    <h:outputText id="processingtime" value="#{servlet.value.processingTime}"/>
+                                                </h:panelGrid>
+                                                <h:panelGrid columns="2">
+                                                    <h:outputLabel value="Request Count:" for="requestcount"/>
+                                                    <h:outputText id="requestcount" value="#{servlet.value.requestCount}"/>
+                                                </h:panelGrid>
+                                                <h:panelGrid columns="2">
+                                                    <h:outputLabel value="Servlet Class:" for="servletclass"/>
+                                                    <h:outputText id="servletclass" value="#{servlet.value.servlet_dash_class}"/>
+                                                </h:panelGrid>
+                                            </rich:collapsiblePanel>
+                                            <f:facet name="footer">
+                                                <rich:dataScroller rendered="#{deployment.result.subsystem.web.servlet._asPropertyList_.size() > 5}"/>
+                                            </f:facet>
+                                        </rich:dataGrid>
+                                    </rich:panel>
+                                    <rich:panel header="Stateless Session Beans">
+                                        <rich:dataGrid value="#{deployment.result.subsystem.ejb3.stateless_dash_session_dash_bean._asPropertyList_}"
+                                                       var="ejb" columns="1" elements="5">
+                                            <rich:collapsiblePanel header="#{ejb.name}" expanded="false">
+                                                <h:panelGrid columns="2">
+                                                    <h:outputLabel value="Class Name:" for="componentclassname"/>
+                                                    <h:outputText id="componentclassname" value="#{ejb.value.component_dash_class_dash_name}"/>
+                                                </h:panelGrid>
+                                                <h:panelGrid columns="2">
+                                                    <h:outputLabel value="Declared Roles:" for="declaredroles"/>
+                                                    <h:outputText id="declaredroles" value="#{ejb.value.declared_dash_roles}"/>
+                                                </h:panelGrid>
+                                                <h:panelGrid columns="2">
+                                                    <h:outputLabel value="Execution Time:" for="executiontime"/>
+                                                    <h:outputText id="executiontime" value="#{ejb.value.execution_dash_time}"/>
+                                                </h:panelGrid>
+                                                <h:panelGrid columns="2">
+                                                    <h:outputLabel value="Invocations:" for="invocations"/>
+                                                    <h:outputText id="invocations" value="#{ejb.value.invocations}"/>
+                                                </h:panelGrid>
+                                                <h:panelGrid columns="2">
+                                                    <h:outputLabel value="Peack Concurrent Invocations:" for="peakconcurrentinvocations"/>
+                                                    <h:outputText id="peakconcurrentinvocations" value="#{ejb.value.peak_dash_concurrent_dash_invocations}"/>
+                                                </h:panelGrid>
+                                                <h:panelGrid columns="2">
+                                                    <h:outputLabel value="Pool Available Count:" for="poolavailablecount"/>
+                                                    <h:outputText id="poolavailablecount" value="#{ejb.value.pool_dash_available_dash_count}"/>
+                                                </h:panelGrid>
+                                                <h:panelGrid columns="2">
+                                                    <h:outputLabel value="Pool Create Count:" for="poolcreatecount"/>
+                                                    <h:outputText id="poolcreatecount" value="#{ejb.value.pool_dash_create_dash_count}"/>
+                                                </h:panelGrid>
+                                                <h:panelGrid columns="2">
+                                                    <h:outputLabel value="Pool Current Size:" for="poolcurrentsize"/>
+                                                    <h:outputText id="poolcurrentsize" value="#{ejb.value.pool_dash_current_dash_size}"/>
+                                                </h:panelGrid>
+                                                <h:panelGrid columns="2">
+                                                    <h:outputLabel value="Pool Max Size:" for="poolmaxsize"/>
+                                                    <h:outputText id="poolmaxsize" value="#{ejb.value.pool_dash_max_dash_size}"/>
+                                                </h:panelGrid>
+                                                <h:panelGrid columns="2">
+                                                    <h:outputLabel value="Pool Name:" for="poolname"/>
+                                                    <h:outputText id="poolname" value="#{ejb.value.pool_dash_name}"/>
+                                                </h:panelGrid>
+                                                <h:panelGrid columns="2">
+                                                    <h:outputLabel value="Pool Remove Count:" for="poolremovecount"/>
+                                                    <h:outputText id="poolremovecount" value="#{ejb.value.pool_dash_remove_dash_count}"/>
+                                                </h:panelGrid>
+                                                <h:panelGrid columns="2">
+                                                    <h:outputLabel value="Run As Role:" for="runasrole"/>
+                                                    <h:outputText id="runasrole" value="#{ejb.value.run_dash_as_dash_role}"/>
+                                                </h:panelGrid>
+                                                <h:panelGrid columns="2">
+                                                    <h:outputLabel value="Security Domain:" for="securitydomain"/>
+                                                    <h:outputText id="securitydomain" value="#{ejb.value.security_dash_domain}"/>
+                                                </h:panelGrid>
+                                                <h:panelGrid columns="2">
+                                                    <h:outputLabel value="Timers:" for="timers"/>
+                                                    <h:outputText id="timers" value="#{ejb.value.timers}"/>
+                                                </h:panelGrid>
+                                                <h:panelGrid columns="2">
+                                                    <h:outputLabel value="Wait Time:" for="waittime"/>
+                                                    <h:outputText id="waittime" value="#{ejb.value.wait_dash_time}"/>
+                                                </h:panelGrid>
+                                            </rich:collapsiblePanel>
+                                            <f:facet name="footer">
+                                                <rich:dataScroller rendered="#{deployment.result.subsystem.ejb3.stateless_dash_session_dash_bean._asPropertyList_.size() > 5}"/>
+                                            </f:facet>
+                                        </rich:dataGrid>
+                                    </rich:panel>
+                                    <rich:panel header="Stateful Session Beans">
+                                    </rich:panel>
+                                    <rich:panel header="Singleton Beans">
+                                    </rich:panel>
+                                    <rich:panel header="Message Driven Beans">
+                                    </rich:panel>
+                                    <rich:panel header="Entity Beans">
+                                    </rich:panel>
+                                </h:panelGrid>
+                            </rich:collapsiblePanel>
+                            <f:facet name="footer">
+                                <rich:dataScroller renderIfSinglePage="true"/>
+                            </f:facet>
+                        </h:form>
+                    </rich:dataGrid>
+                </rich:panel>
+            </div>
+        </div>
+    </body>
+</html>
