@@ -59,6 +59,7 @@
                     <c:set var="garbageCollector" value="#{platform.type_eq_garbage_dash_collector}" scope="session"/>
                     <c:set var="gcScavenge" value="#{garbageCollector.name_eq_PS_Scavenge}" scope="session"/>
                     <c:set var="gcMarkSweep" value="#{garbageCollector.name_eq_PS_MarkSweep}" scope="session"/>
+                    <c:set var="is72" value="#{_root_.release_dash_version.startsWith('7.2')}" scope="session"/>
                     <rich:panel header="Server Platform">
                         <rich:collapsiblePanel header="Runtime">
                             <h:panelGrid columns="2">
@@ -149,7 +150,14 @@
             </div>
             <div id="col2side">
                 <rich:panel id="deploymentpanel" header="Deployments">
-                    <rich:dataGrid value="#{_CLI_['/deployment=*/:read-resource(recursive=true,include-runtime=true,include-defaults=true)']}"
+                    <c:if test="#{is72}">
+                        <c:set var="readResourceCmd" value="/deployment=*/:read-resource(recursive=true,include-runtime=true,include-defaults=true)" scope="session"/>
+                    </c:if>
+                    <c:if test="#{!is72}">
+                        <c:set var="readResourceCmd" value="/deployment=*/:read-resource(recursive=true,include-defaults=true)" scope="session"/>
+                    </c:if>
+
+                    <rich:dataGrid value="#{_CLI_[readResourceCmd]}"
                                    var="deployment" columns="1" elements="10">
                         <h:form>
                             <rich:collapsiblePanel header="#{deployment.result.name}" expanded="false">
