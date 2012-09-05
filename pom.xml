@@ -10,10 +10,10 @@
         <version>9</version>
     </parent>
 
-    <groupId>org.jboss.dmrresolver.demo</groupId>
+    <groupId>org.jboss.cliresolver.demo</groupId>
     <artifactId>diycdemo</artifactId>
     <name>DIYC Demo</name>
-    <description>The 'Do It Yourself Console' demo demonstrates use of the dmrresolver.</description>
+    <description>The 'Do It Yourself Console' demo demonstrates use of the cli-resolver.</description>
     <version>1.0.0.Alpha1-SNAPSHOT</version>
     <packaging>war</packaging>
 
@@ -96,8 +96,8 @@
             <artifactId>richfaces-core-impl</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.jboss.dmrresolver</groupId>
-            <artifactId>dmrresolver</artifactId>
+            <groupId>org.jboss.cliresolver</groupId>
+            <artifactId>cli-resolver</artifactId>
             <version>${project.version}</version>
         </dependency>
 

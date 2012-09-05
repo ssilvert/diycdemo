@@ -1,4 +1,4 @@
-The **"Do It Yourself Console"** demo shows how easy it is to create a customized web console for JBoss AS7 Management.  It uses the [dmrresolver](https://github.com/ssilvert/dmrresolver) to bind JSF to the AS7 Management Model.  It also uses RichFaces for its slick components.  But any JSF component library will work.
+The **"Do It Yourself Console"** demo shows how easy it is to create a customized web console for JBoss AS7 Management.  It uses the [cli-resolver](https://github.com/ssilvert/cli-resolver) to bind JSF to the AS7 Management Model.  It also uses RichFaces for its slick components.  But any JSF component library will work.
 
 See the [Getting Started Page](https://github.com/ssilvert/diycdemo/wiki/Getting-Started) for download / build / deploy info.
 
