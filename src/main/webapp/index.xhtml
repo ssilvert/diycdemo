@@ -341,6 +341,14 @@
                             <rich:dataScroller renderIfSinglePage="true"/>
                         </f:facet>
                     </rich:dataGrid>
+
+                    <c:if test="#{is72}">
+                        <c:forEach items="#{_CLI_[readResourceCmd]}" var="deployment">
+                            <c:set var="totalSessions" value="#{totalSessions + deployment.result.subsystem.web.active_dash_sessions}" scope="request"/>
+                        </c:forEach>
+                        <h:outputLabel value="Total HTTP Sessions:" for="totalhttpsessions"/>
+                        <h:outputText id="totalhttpsessions" value="#{totalSessions}"/>
+                    </c:if>
                 </rich:panel>
             </div>
         </div>
